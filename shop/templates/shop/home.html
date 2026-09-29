@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MiniCart - Online Store</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .hero {
+            background: #212529;
+            color: white;
+            padding: 60px 20px;
+            border-radius: 15px;
+        }
+
+        .product-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            height: 220px;
+            object-fit: contain;
+            background: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+
+        <div class="container">
+
+            <a class="navbar-brand" href="/">
+                MiniCart 🛒
+            </a>
+
+            <div>
+    {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}" class="btn btn-outline-light">
+            Logout
+        </a>
+    {% else %}
+        <a href="{% url 'login' %}" class="btn btn-outline-light">
+            Login
+        </a>
+    {% endif %}
+
+    <a href="{% url 'cart' %}" class="btn btn-outline-light">
+        Cart 🛒
+    </a>
+</div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Main Content -->
+
+    <div class="container mt-4">
+
+        <!-- Hero Section -->
+
+        <div class="hero text-center">
+
+            <h1>Welcome to MiniCart</h1>
+
+            <p>Shop your favourite products at the best prices.</p>
+
+            <a href="#products" class="btn btn-warning">
+                Shop Now
+            </a>
+
+        </div>
+
+
+        <!-- Products -->
+
+        <h2 id="products" class="text-center my-5">
+            Our Products
+        </h2>
+
+
+        <div class="row g-4">
+
+            {% for product in products %}
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="card product-card shadow-sm h-100">
+
+                    {% if product.image %}
+
+                    <img src="{{ product.image.url }}"
+                         class="card-img-top product-image"
+                         alt="{{ product.name }}">
+
+                    {% else %}
+
+                    <div class="product-image d-flex align-items-center justify-content-center">
+                        No Image
+                    </div>
+
+                    {% endif %}
+
+
+                    <div class="card-body">
+
+                        <h5 class="card-title">
+                            {{ product.name }}
+                        </h5>
+
+                        <h4 class="text-success">
+                            ₹{{ product.price }}
+                        </h4>
+
+                        <p class="card-text">
+                            {{ product.description }}
+                        </p>
+
+                        <a href="{% url 'add_to_cart' product.id %}" class="btn btn-dark w-100">
+                    Add to Cart
+                   </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="col-12 text-center">
+
+                <p>No products available.</p>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <!-- Footer -->
+
+    <footer class="bg-dark text-white text-center p-4 mt-5">
+
+        <p class="mb-0">
+            © 2026 MiniCart. All Rights Reserved.
+        </p>
+
+    </footer>
+
+</body>
+
+</html>
